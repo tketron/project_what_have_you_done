@@ -5,20 +5,9 @@ class SunlightAPI {
   //returns 3 legislators per zipcode
   getLegislators(zipcode, callback) {
     var url = `${baseURI}legislators/locate?zip=${zipcode}`;
-
     request(url, function(error, response, body) {
       if (!error & response.statusCode == 200) {
-
-        var legislators = [];
-        var data = JSON.parse(body).results;
-        // console.log(data);
-        data.forEach(function(legislator) {
-          // console.log(SunlightAPI.parseIntoLegislators(legislator));
-          legislators.push(SunlightAPI.parseIntoLegislators(legislator));
-          // legislators.push(parseIntoLegislators(legislator));
-        })
-
-        callback(legislators);
+        callback(SunlightAPI.parseIntoLegislators(JSON.parse(body).results));
       }
     });
   }
@@ -34,13 +23,21 @@ class SunlightAPI {
   }
 
   static parseIntoLegislators(parsedData) {
-    var legislator = {
-      bioguide_id: parsedData.bioguide_id,
-      chamber: parsedData.chamber,
-      first_name: parsedData.first_name,
-      last_name: parsedData.last_name
-    }
-    return legislator;
+    var legislators = [];
+
+    parsedData.forEach(function(dataObject) {
+      var legislator = {
+        bioguide_id: dataObject.bioguide_id,
+        chamber: dataObject.chamber,
+        first_name: dataObject.first_name,
+        last_name: dataObject.last_name,
+        party: dataObject.party,
+        chamber: dataObject.chamber
+      }
+      legislators.push(legislator);
+    });
+
+    return legislators;
   }
 
   //BROKEN
