@@ -17,7 +17,7 @@ class SunlightAPI {
     var url = `${baseURI}votes?&order=voted_at&voter_ids.${id}__exists==true&bill_id__exists=true&fields=bill_id,voters.${id}`;
     request(url, function(error, response, body) {
       if (!error & response.statusCode == 200) {
-        callback(JSON.parse(body).results);
+        callback(SunlightAPI.parseIntoVotes(JSON.parse(body).results));
       }
     });
   }
@@ -41,17 +41,20 @@ class SunlightAPI {
   }
 
   //BROKEN
-  static parseIntoVotes(legislatorID, parsedData) {
-    var stringID = legislatorID.toString();
-    console.log(parsedData.voters);
+  static parseIntoVotes(parsedData) {
+    var votes = [];
 
-    var vote = {
-      bill_id: parsedData.bill_id,
-      vote: parsedData.voters.stringID
-    }
-    return vote;
+    parsedData.forEach(function(dataObject) {
+      var vote = {
+        bill_id: dataObject.bill_id,
+        // vote: dataObject.voters.stringID
+      }
+      votes.push(vote);
+    });
+    return votes;
   }
 }
+
 
 module.exports = SunlightAPI;
 //

@@ -1,5 +1,5 @@
 <h1>Submitted zipcode was {{zip}}</h1>
 {{#each data as |legislator|}}
-  <h3>{{legislator.first_name}} {{legislator.last_name}}</h3>
+  <a href="/representatives/{{legislator.bioguide_id}}">{{legislator.first_name}} {{legislator.last_name}}</a>
   <h4>{{legislator.chamber}}-{{legislator.party}}</h4>
 {{/each}}
