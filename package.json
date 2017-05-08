@@ -4,6 +4,7 @@
   "description": "Build an application to help track the legislative activities of your local representatives.",
   "main": "sunlight_api.js",
   "dependencies": {
+    "express": "^4.15.2",
     "request": "^2.81.0"
   },
   "devDependencies": {},

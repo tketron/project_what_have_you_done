@@ -13,12 +13,12 @@ class SunlightAPI {
     });
   }
 
-  //returns roll_id of 20 most recently voted on items
+  //returns bill_id of 20 most recently voted on items
   getRecentVotes(id, callback) {
-    var url = `${baseURI}votes?&order=voted_at&voter_ids.${id}__exists==true&fields=roll_id`;
+    var url = `${baseURI}votes?&order=voted_at&voter_ids.${id}__exists==true&bill_id__exists=true&fields=bill_id,voters.${id}`;
     request(url, function(error, response, body) {
       if (!error & response.statusCode == 200) {
-        callback(JSON.parse(body));
+        callback(JSON.parse(body).results);
       }
     });
   }
@@ -33,17 +33,29 @@ class SunlightAPI {
     return legislator;
   }
 
+  //BROKEN
+  parseIntoVotes(legislatorID, parsedData) {
+    var stringID = legislatorID.toString();
+    console.log(parsedData.voters);
+
+    var vote = {
+      bill_id: parsedData.bill_id,
+      vote: parsedData.voters.stringID
+    }
+    return vote;
+  }
 }
 
 const sunlight = new SunlightAPI();
 sunlight.getLegislators(94602, function(data) {
   data.forEach(function(legislator) {
     console.log(sunlight.parseIntoLegislators(legislator));
-    console.log(sunlight.getRecentVotes(legislator.bioguide_id, function(ID) {
-      console.log(ID);
-    }))
+
+    sunlight.getRecentVotes(legislator.bioguide_id, function(data) {
+      data.forEach(function(vote) {
+        console.log(vote);
+        console.log(sunlight.parseIntoVotes(legislator.bioguide_id, vote));
+      })
+    });
   });
 });
-// sunlight.getRecentVotes(function(data) {
-//   console.log(data);
-// });
