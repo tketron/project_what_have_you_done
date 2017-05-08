@@ -8,7 +8,17 @@ class SunlightAPI {
 
     request(url, function(error, response, body) {
       if (!error & response.statusCode == 200) {
-        callback((JSON.parse(body)).results);
+
+        var legislators = [];
+        var data = JSON.parse(body).results;
+        // console.log(data);
+        data.forEach(function(legislator) {
+          // console.log(SunlightAPI.parseIntoLegislators(legislator));
+          legislators.push(SunlightAPI.parseIntoLegislators(legislator));
+          // legislators.push(parseIntoLegislators(legislator));
+        })
+
+        callback(legislators);
       }
     });
   }
@@ -23,7 +33,7 @@ class SunlightAPI {
     });
   }
 
-  parseIntoLegislators(parsedData) {
+  static parseIntoLegislators(parsedData) {
     var legislator = {
       bioguide_id: parsedData.bioguide_id,
       chamber: parsedData.chamber,
@@ -34,7 +44,7 @@ class SunlightAPI {
   }
 
   //BROKEN
-  parseIntoVotes(legislatorID, parsedData) {
+  static parseIntoVotes(legislatorID, parsedData) {
     var stringID = legislatorID.toString();
     console.log(parsedData.voters);
 
@@ -46,16 +56,19 @@ class SunlightAPI {
   }
 }
 
-const sunlight = new SunlightAPI();
-sunlight.getLegislators(94602, function(data) {
-  data.forEach(function(legislator) {
-    console.log(sunlight.parseIntoLegislators(legislator));
+module.exports = SunlightAPI;
+//
+// const sunlight = new SunlightAPI();
+// sunlight.getLegislators(94602, function(data) {
+//   console.log(data);
+  // data.forEach(function(legislator) {
+  //   console.log(sunlight.parseIntoLegislators(legislator));
 
-    sunlight.getRecentVotes(legislator.bioguide_id, function(data) {
-      data.forEach(function(vote) {
-        console.log(vote);
-        console.log(sunlight.parseIntoVotes(legislator.bioguide_id, vote));
-      })
-    });
-  });
-});
+    // sunlight.getRecentVotes(legislator.bioguide_id, function(data) {
+    //   data.forEach(function(vote) {
+    //     console.log(vote);
+    //     console.log(sunlight.parseIntoVotes(legislator.bioguide_id, vote));
+    //   })
+  //   // });
+//   // });
+// });

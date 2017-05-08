@@ -1,1 +1,4 @@
-<h1>Submitted zipcode was {{zip}}</h1>
+<h1>Submitted zipcode was</h1>
+{{#each data as |legislator|}}
+  <h3>{{legislator.first_name}} {{legislator.last_name}}</h3>
+{{/each}}

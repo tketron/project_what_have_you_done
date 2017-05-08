@@ -1,15 +1,15 @@
 var express = require('express');
 var router = express.Router();
+var sunlight = require('../public/javascripts/sunlight_api.js');
 
-/* GET home page. */
-// router.get('/', function(req, res, next) {
-//   // res.send("routing correct");
-//   const zip = req.query.zipcode;
-//   res.send(zip);
-// });
+var sunlightInstance = new sunlight();
 
 router.post('/', function(req, res, next) {
   const zip = req.body.zipcode;
-  res.render('representatives', {zip: zip});l
+  const data = sunlightInstance.getLegislators(zip, function(data) {
+    // res.render('representatives', {zip: zip});
+    res.render('representatives', {data: data});
+  })
+
 })
 module.exports = router;
