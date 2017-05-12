@@ -1,24 +1,26 @@
 var express = require('express');
 var router = express.Router();
-// var sunlight = require('../public/javascripts/sunlight_api.js');
-
-// var sunlightInstance = new sunlight();
 
 var sunlight = require('../services/sunlight_api.js');
 
 router.post('/', function(req, res, next) {
-  const zip = req.body.zipcode;
-  var data = sunlight.getLegislators(zip, function(data) {
-    res.render('representatives', {data: data, zip: zip} );
-  });
+  var templateData = {};
+  templateData.zip = req.body.zipcode;
+  sunlight.getLegislators(templateData.zip)
+    .then(function(legislatorData) {
+      templateData.legislatorData = legislatorData;
+      res.render('representatives', {legislators: templateData.legislatorData, zip: templateData.zip} );
+    }).catch(console.error);
 });
 
 router.get('/:id', function(req, res, next) {
-  const id = req.params.id;
-  var votes = sunlight.getRecentVotes(id, function(votes){
-    res.render('record', {id: id, votes: votes});
-  });
+  var templateData = {};
+  templateData.bioguide_id = req.params.id;
+  sunlight.getRecentVotes(templateData.bioguide_id)
+    .then(function(voteData) {
+      templateData.voteData = voteData;
+      res.render('record', {id: templateData.bioguide_id, votes: templateData.voteData});
+    }).catch(console.error);
 });
-
 
 module.exports = router;
