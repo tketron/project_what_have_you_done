@@ -19,7 +19,12 @@ router.get('/:id', function(req, res, next) {
   sunlight.getRecentVotes(templateData.bioguide_id)
     .then(function(voteData) {
       templateData.voteData = voteData;
-      res.render('record', {id: templateData.bioguide_id, votes: templateData.voteData});
+      sunlight.getAllBillDetails(templateData.voteData)
+      .then(function(billData) {
+        templateData.billData = billData;
+        console.log(billData);
+        res.render('record', {id: templateData.bioguide_id, votes: templateData.voteData, bills: templateData.billData});
+      });
     }).catch(console.error);
 });
 

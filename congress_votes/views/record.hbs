@@ -1,10 +1,16 @@
 <h1>Voter record for {{id}}</h1>
 
-{{#each votes as |bill|}}
+{{#each votes as |vote|}}
   <p>
-    {{bill.bill_id}}
+    {{vote.bill_id}}
   </p>
   <p>
-    {{bill.legislator_vote}}
+    {{vote.legislator_vote}}
+  </p>
+{{/each}}
+
+{{#each bills as |bill|}}
+  <p>
+    {{bill.official_title}}
   </p>
 {{/each}}

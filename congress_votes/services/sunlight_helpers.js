@@ -19,12 +19,12 @@ var sunlightHelpers = {
     return legislators;
   },
 
-  parseIntoVotes: function(parsedData, id) {
+  parseIntoVotes: function(parsedData, params) {
     var votes = {};
     parsedData.forEach(function(dataObject) {
       var vote = {
         bill_id: dataObject.bill_id,
-        legislator_vote: dataObject.voter_ids[id]
+        legislator_vote: dataObject.voter_ids[params.id]
       }
       votes[vote.bill_id] = vote;
     });
@@ -32,7 +32,12 @@ var sunlightHelpers = {
   },
 
   parseIntoBill: function(parsedData) {
-
+    var bill = {};
+    parsedData.forEach(function(dataObject) {
+      bill.bill_id = dataObject.bill_id,
+      bill.official_title = dataObject.official_title
+    })
+    return bill;
   }
 
 }
